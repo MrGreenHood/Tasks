@@ -160,7 +160,15 @@ public:
     Expression * parse_atom(string &str)
     {
         Expression *expr = new Expression;
-        if (!parse_double(str, expr->value))
+        skip_spaces(str);
+        if(str[0]=='(')
+        {
+            int index_c=str.rfind(')');
+            string subs= str.substr(1,index_c-1);
+            expr=parse_add_sub(subs);
+            str.erase(0,index_c+1);
+        }
+        else if (!parse_double(str, expr->value))
         {
             throw std::invalid_argument("Expected number at: " + str);
         }
